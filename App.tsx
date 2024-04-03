@@ -1,11 +1,13 @@
+import { Alert, Button, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Alert, Text } from 'react-native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = () => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Navigation from './Navigation';
+import axios from 'axios';
+
+export default function App(){
   const [email, setEmail] = useState('lburgos@equinorte.net');
-  const [password, setPassword] = useState('1234567890');
+  const [password, setPassword] = useState('12345678900');
 
   const handleLogin = async () => {
     const body = JSON.stringify({
@@ -16,7 +18,7 @@ const LoginScreen = () => {
 
     var saveToken = async (token: string) => {
       try {
-        await AsyncStorage.setItem('token',token);
+        await AsyncStorage.setItem('token', token);
         console.log('Token guardado exitosamente');
       } catch (error) {
         console.error('Error al guardar el token:', error);
@@ -47,7 +49,7 @@ const LoginScreen = () => {
 
       const data = await response.json();
       if (response.ok) {
-        console.log("resp: ",data.access_token);
+        console.log("resp: ", data.access_token);
         saveToken(data.access_token);
       } else {
         Alert.alert('Error', data.message);
@@ -57,45 +59,34 @@ const LoginScreen = () => {
       Alert.alert('Error', 'Hubo un problema al intentar iniciar sesión');
     }
 
-    console.log("EEE",getData("token"));
-  
-
-   
-
-
-    const aboutMe = async () => {
-      
-      // try {
-      //   const respUser = await fetch('http://127.0.0.1:8000/api/aboutMe', {
-      //     method:'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'Authorization': `Bearer ${token}`,
-      //     }
-      //   })
-      // } catch (error) {
-        
-      // }
-    }
+    // Llamas a getData y esperas a que se resuelva la promesa
+    getData("token").then((token) => {
+      // Aquí puedes usar el token
+      console.log("Token:", token);
+    }).catch((error) => {
+      // Manejar errores si la promesa se rechaza
+      console.error('Error al obtener el token:', error);
+    });
   }
 
   return (
-    <View>
-      <TextInput
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Iniciar sesión" onPress={handleLogin} />
-    </View>
-    
+    // <View>
+    //   <TextInput
+    //     placeholder="Correo electrónico"
+    //     value={email}
+    //     onChangeText={setEmail}
+    //   />
+    //   <TextInput
+    //     placeholder="Contraseña"
+    //     value={password}
+    //     onChangeText={setPassword}
+    //     secureTextEntry
+    //   />
+    //   <Button title="Iniciar sesión" onPress={handleLogin} />
+    // </View>
+    <Navigation />
+
   );
 };
 
-export default LoginScreen;
+
