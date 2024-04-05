@@ -12,7 +12,9 @@ const HomeScreen = () => {
     
     return (
         <View>
-        <Text>Home Screen</Text>
+        <Text style={
+            {textAlign:"center", marginTop:200}
+        }>Home Screen</Text>
 
         <TouchableOpacity
             onPress={() => navigation.navigate("Profile")}

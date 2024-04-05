@@ -2,11 +2,11 @@ import { Alert, Button, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import Navigation from './Navigation';
+import HomeScreen from './app/screens/HomeScreen';
+import LoginScreen from './app/screens/LoginScreen';
+import Navigation from './app/navigation/Navigation';
 import { NavigationContainer } from '@react-navigation/native';
-import ProfileScreen from './screens/ProfileScreen';
+import ProfileScreen from './app/screens/ProfileScreen';
 import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -30,14 +30,8 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen}options={{
-                    headerShown:false
-                }} /> 
-        
-      </Stack.Navigator>
-      
+     
+      <Navigation />
     </NavigationContainer>
     
    );
