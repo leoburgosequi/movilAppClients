@@ -2,91 +2,45 @@ import { Alert, Button, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
 import Navigation from './Navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import ProfileScreen from './screens/ProfileScreen';
+import SplashScreen from 'react-native-splash-screen';
 import axios from 'axios';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App(){
-  const [email, setEmail] = useState('lburgos@equinorte.net');
-  const [password, setPassword] = useState('12345678900');
+const Stack = createStackNavigator();
 
-  const handleLogin = async () => {
-    const body = JSON.stringify({
-      email: email,
-      password: password,
-    });
-    console.log(body);
+export default function App() {
+  const [showSplash, setShowSplash] = useState(false);
 
-    var saveToken = async (token: string) => {
-      try {
-        await AsyncStorage.setItem('token', token);
-        console.log('Token guardado exitosamente');
-      } catch (error) {
-        console.error('Error al guardar el token:', error);
-      }
-    }
+  useEffect(() => {
+    SplashScreen.hide();
+   // Ocultar la pantalla de bienvenida después de un cierto tiempo
+    setTimeout(() => {
+      setShowSplash(true);
+    }, 2000); // Por ejemplo, ocultar después de 2 segundos
+  }, []);
 
-    const getData = async (key: string) => {
-      try {
-        const value = await AsyncStorage.getItem(key);
-        if (value !== null) {
-          return value;
-        } else {
-          console.log('No hay datos almacenados para la clave', key);
-        }
-      } catch (error) {
-        console.error('Error al obtener datos:', error);
-      }
-    };
-
-    try {
-      const response = await fetch('http://localhost:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log("resp: ", data.access_token);
-        saveToken(data.access_token);
-      } else {
-        Alert.alert('Error', data.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Error', 'Hubo un problema al intentar iniciar sesión');
-    }
-
-    // Llamas a getData y esperas a que se resuelva la promesa
-    getData("token").then((token) => {
-      // Aquí puedes usar el token
-      console.log("Token:", token);
-    }).catch((error) => {
-      // Manejar errores si la promesa se rechaza
-      console.error('Error al obtener el token:', error);
-    });
+  if (!showSplash) {
+    return null; // Muestra el splash screen mientras la aplicación se carga
   }
 
   return (
-    // <View>
-    //   <TextInput
-    //     placeholder="Correo electrónico"
-    //     value={email}
-    //     onChangeText={setEmail}
-    //   />
-    //   <TextInput
-    //     placeholder="Contraseña"
-    //     value={password}
-    //     onChangeText={setPassword}
-    //     secureTextEntry
-    //   />
-    //   <Button title="Iniciar sesión" onPress={handleLogin} />
-    // </View>
-    <Navigation />
-
-  );
-};
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen}options={{
+                    headerShown:false
+                }} /> 
+        
+      </Stack.Navigator>
+      
+    </NavigationContainer>
+    
+   );
+}
 
 
