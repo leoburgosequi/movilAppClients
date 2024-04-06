@@ -2,6 +2,7 @@ import { Alert, Button, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthProvider } from './app/context/AuthContext';
 import HomeScreen from './app/screens/HomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import Navigation from './app/navigation/Navigation';
@@ -29,11 +30,12 @@ export default function App() {
   }
 
   return (
+    <AuthProvider>
     <NavigationContainer>
      
       <Navigation />
     </NavigationContainer>
-    
+    </AuthProvider>
    );
 }
 

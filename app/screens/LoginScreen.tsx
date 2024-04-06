@@ -1,17 +1,20 @@
-import { Alert, Button, Text, TextInput, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { Alert, Button, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import { getToken, getUser, saveToken, saveUser } from '../storage/UserStorage'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../context/AuthContext';
+import { LoginStyles } from '../styles/LoginStyles';
 import { NavigationContainer } from '@react-navigation/native';
+import { StandardStyles } from '../styles/StandardStyles';
 import { useNavigation } from '@react-navigation/native';
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}) {
 
     const [email, setEmail] = useState('lburgos@equinorte.net');
     const [password, setPassword] = useState('12345678900');
 
-    const navigation = useNavigation();
+   const val = useContext(AuthContext);
 
     const handleLogin = async () => {
 
@@ -34,7 +37,7 @@ export default function LoginScreen() {
             if (response.ok) {
                 console.log("resp: ", data.access_token);
                 saveToken(data.access_token);
-                navigation.navigate('Home');
+              //  navigation.navigate('Home');
 
             } else {
                 Alert.alert('Error', data.message);
@@ -47,8 +50,9 @@ export default function LoginScreen() {
     }
 
     return (
-
-        <View>
+        <View style={LoginStyles.container}>
+        <View style={LoginStyles.wrapper} >
+            <Text>{val}</Text>
             <TextInput
                 placeholder="Correo electrónico"
                 value={email}
@@ -60,7 +64,20 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title="Iniciar sesión" onPress={handleLogin} />
+
+
+           <TouchableOpacity style={[StandardStyles.orangePrimaryButton, {marginTop:10}]} 
+              onPress={handleLogin}  >
+                <Text style={[StandardStyles.simpleTextWhite, {fontWeight:"bold"}]}>INGRESAR</Text>
+
+           </TouchableOpacity>
+           <TouchableOpacity style={[StandardStyles.orangeSecondaryButton, {marginTop:10}]} 
+              onPress={() => navigation.navigate("Register")}  >
+                <Text style={[StandardStyles.simpleTextOrange, {fontWeight:"bold"}]}>REGISTRARME</Text>
+
+           </TouchableOpacity>
+        </View>
+        
         </View>
 
     )
