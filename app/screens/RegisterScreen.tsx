@@ -7,16 +7,19 @@ import { StandardStyles } from "../styles/StandardStyles";
 
 const RegisterScreen = ({navigation}) => {
 
-    const [email, setEmail] = useState('leonardo1@gmail.com');
+    const [email, setEmail] = useState('leonardo25@gmail.com');
     const [password, setPassword] = useState('1234567890');
     const [name, setName] = useState('leonardo');
     const [passwordConfirmation, setPasswordConfirmation] = useState('1234567890');
 
-    const register  = useContext(AuthContext);
+    const [other,userToken,register] = useContext(AuthContext);
+    console.log(register);
+
     return (
         <View style={LoginStyles.container}>
         <View style={LoginStyles.wrapper} >
-        {/* <Text>{userToken}</Text> */}
+        <Text>{other}</Text>
+        <Text>{userToken}</Text>
         <TextInput
                 placeholder="Nombre"
                 value={name}

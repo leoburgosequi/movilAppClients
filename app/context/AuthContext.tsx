@@ -8,7 +8,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }:any) => {
 
     const [isLoading, setIsLoading] = useState(true);
-    const [userToken, setUserToken] = useState('EL feo ');
+    const [userToken, setUserToken] = useState('EL feito ');
+    const [other, setother] = useState('EL feito 2.0 ');
 
     const login = () => {
         setUserToken('gjksdgjksd');
@@ -23,14 +24,12 @@ export const AuthProvider = ({ children }:any) => {
     }
 
     const register = (name: string, email: string, password: string, passwordConfirmation: string) => {
-       
         const data = {
             name,
             email,
             password,
             password_confirmation: passwordConfirmation
         }
-
         console.log(data);
 
         axios.post(`${BASE_URI}/register`, data).then(res => {
@@ -43,14 +42,11 @@ export const AuthProvider = ({ children }:any) => {
             console.log(`Error register ${e}`)
         });
 
-
     };
 
 
-
-
     return (
-        <AuthContext.Provider value={register}>
+        <AuthContext.Provider value={[userToken, other,register]} >
             {children}
         </AuthContext.Provider>
     );

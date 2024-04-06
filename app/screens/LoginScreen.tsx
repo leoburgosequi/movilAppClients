@@ -14,7 +14,7 @@ export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('lburgos@equinorte.net');
     const [password, setPassword] = useState('12345678900');
 
-   const val = useContext(AuthContext);
+   const [userToken, other] = useContext(AuthContext);
 
     const handleLogin = async () => {
 
@@ -52,7 +52,8 @@ export default function LoginScreen({navigation}) {
     return (
         <View style={LoginStyles.container}>
         <View style={LoginStyles.wrapper} >
-            <Text>{val}</Text>
+            <Text>{userToken}</Text>
+            <Text>{other}</Text>
             <TextInput
                 placeholder="Correo electrónico"
                 value={email}
