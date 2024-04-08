@@ -3,35 +3,25 @@ import React from "react";
 
 const USER_KEY = '@user:key'
 
-async function saveUser(user: any) {
+async function saveItem(key:string,data:string) {
     try {
-        await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
-        console.log('Usuario guardado exitosamente');
-        return JSON.stringify(user);
+        await AsyncStorage.setItem(key, data);
+        console.log('Data guardada exitosamente');
+        return data;
     } catch (error) {
         console.error('Error al guardar el usuario:', error);
         return null;
     }
 }
 
-async function saveToken(token: string) {
+async function getItem(key: string) {
     try {
-        await AsyncStorage.setItem('token', token);
-        console.log('Token guardado exitosamente');
-        return token;
-    } catch (error) {
-        console.error('Error al guardar el token:', error);
-        return null;
-    }
-}
-
-async function getUser(key: string | null) {
-    try {
-        const value = await AsyncStorage.getItem(key === null ? USER_KEY : key);
+        const value = await AsyncStorage.getItem(key);
         if (value !== null) {
-            return JSON.parse(value);
+            return value;
         } else {
-            console.log('No hay datos almacenados para la clave', USER_KEY);
+            console.log('No hay datos almacenados para la clave', key);
+            return null;
         }
     } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -39,11 +29,11 @@ async function getUser(key: string | null) {
     }
 }
 
-async function deleteUser() {
+async function deleteItem(key:string) {
     try {
-        await AsyncStorage.removeItem(USER_KEY);
-        const item = await AsyncStorage.getItem(USER_KEY);
-        return (item === null) ? "Usuario eliminado del storage" : "Error al eliminar usuario del storage";
+        await AsyncStorage.removeItem(key);
+        const item = await AsyncStorage.getItem(key);
+        return (item === null) ? "data eliminada del storage" : "Error al eliminar la data del storage";
     } catch (error) {
         console.log("Error al eliminar: ", error);
         return "Error";
@@ -63,4 +53,17 @@ const getToken = async (key: string) => {
     }
 };
 
-export { deleteUser, getUser, saveUser, saveToken, getToken }
+
+async function saveToken(key: string, token:string) {
+    try {
+        await AsyncStorage.setItem(key, token);
+        console.log('Token guardado exitosamente');
+        return token;
+    } catch (error) {
+        console.error('Error al guardar el token:', error);
+        return null;
+    }
+}
+
+
+export { deleteItem, getItem, saveItem, saveToken, getToken }

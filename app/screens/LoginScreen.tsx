@@ -9,51 +9,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StandardStyles } from '../styles/StandardStyles';
 import { useNavigation } from '@react-navigation/native';
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({navigation}:any) {
 
     const [email, setEmail] = useState('lburgos@equinorte.net');
     const [password, setPassword] = useState('12345678900');
-
-   const [userToken, other] = useContext(AuthContext);
-
-    const handleLogin = async () => {
-
-        const body = JSON.stringify({
-            email: email,
-            password: password,
-        });
-        console.log(body);
-
-        try {
-            const response = await fetch('http://localhost:8000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: body,
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log("resp: ", data.access_token);
-                saveToken(data.access_token);
-              //  navigation.navigate('Home');
-
-            } else {
-                Alert.alert('Error', data.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            Alert.alert('Error', 'Hubo un problema al intentar iniciar sesión');
-        }
-
-    }
+    const [login] = useContext(AuthContext);
 
     return (
         <View style={LoginStyles.container}>
         <View style={LoginStyles.wrapper} >
-            <Text>{userToken}</Text>
-            <Text>{other}</Text>
             <TextInput
                 placeholder="Correo electrónico"
                 value={email}
@@ -68,15 +32,18 @@ export default function LoginScreen({navigation}) {
 
 
            <TouchableOpacity style={[StandardStyles.orangePrimaryButton, {marginTop:10}]} 
-              onPress={handleLogin}  >
+              onPress={() => {login(email,password);}}  >
                 <Text style={[StandardStyles.simpleTextWhite, {fontWeight:"bold"}]}>INGRESAR</Text>
 
            </TouchableOpacity>
+
+
            <TouchableOpacity style={[StandardStyles.orangeSecondaryButton, {marginTop:10}]} 
               onPress={() => navigation.navigate("Register")}  >
                 <Text style={[StandardStyles.simpleTextOrange, {fontWeight:"bold"}]}>REGISTRARME</Text>
 
            </TouchableOpacity>
+
         </View>
         
         </View>

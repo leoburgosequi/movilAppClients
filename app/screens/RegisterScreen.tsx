@@ -12,14 +12,12 @@ const RegisterScreen = ({navigation}) => {
     const [name, setName] = useState('leonardo');
     const [passwordConfirmation, setPasswordConfirmation] = useState('1234567890');
 
-    const [other,userToken,register] = useContext(AuthContext);
+    const [register] = useContext(AuthContext);
     console.log(register);
 
     return (
         <View style={LoginStyles.container}>
         <View style={LoginStyles.wrapper} >
-        <Text>{other}</Text>
-        <Text>{userToken}</Text>
         <TextInput
                 placeholder="Nombre"
                 value={name}

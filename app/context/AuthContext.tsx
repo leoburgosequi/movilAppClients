@@ -1,41 +1,62 @@
 import React, { createContext, useState } from "react";
+import { deleteItem, getItem, saveItem } from "../storage/UserStorage";
 
 import { BASE_URI } from "../config";
 import axios from "axios";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }:any) => {
+export const AuthProvider = ({ children }: any) => {
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [userToken, setUserToken] = useState('EL feito ');
-    const [other, setother] = useState('EL feito 2.0 ');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const login = () => {
-        setUserToken('gjksdgjksd');
-        setIsLoading(false);
-        return "ok";
+    const login = (email: string, password: string) => {
+        axios.post(`${BASE_URI}/login`, {
+            email, password
+        }).then(res => {
+            console.log(res.data.user);
+            saveItem('user:data', JSON.stringify(res.data.user));
+            saveItem('user:token', res.data.access_token);
+        }).catch(error => {
+            console.log(`Login error ${error}`);
+        });
     }
 
     const logout = () => {
-        setUserToken('');
-        setIsLoading(false);
-        return "ok";
+
+        const token = getItem('user:token').then(res => {
+            console.log("token: ", res);
+            if (res !== null) {
+                axios.post(`${BASE_URI}/logout`, {}, {
+                    headers: {
+                        'Authorization': `Bearer ${res}`
+                    }
+                }).then(res => {
+                    console.log(res.data);
+                    deleteItem('user:token').then(resp => {
+                        console.log(resp)
+                    })
+                }).catch(e => console.log("Error al realizar petición. ",e));
+            }
+        }).catch(error => {
+            console.log("Error al obtener data", error);
+        })
     }
 
     const register = (name: string, email: string, password: string, passwordConfirmation: string) => {
+        setIsLoading(true);
         const data = {
             name,
             email,
             password,
             password_confirmation: passwordConfirmation
         }
-        console.log(data);
+        console.log("data", data);
 
         axios.post(`${BASE_URI}/register`, data).then(res => {
-           
-            let user = res.data;
-            console.log(user);
+
+            let data = res.data;
+            console.log("res",data.user);
         }
 
         ).catch(e => {
@@ -44,9 +65,8 @@ export const AuthProvider = ({ children }:any) => {
 
     };
 
-
     return (
-        <AuthContext.Provider value={[userToken, other,register]} >
+        <AuthContext.Provider value={[login, register, logout]} >
             {children}
         </AuthContext.Provider>
     );
