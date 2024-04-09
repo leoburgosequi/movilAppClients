@@ -1,9 +1,11 @@
+import React, { useContext } from "react";
+
+import { AuthContext } from "../context/AuthContext";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationContainer } from "@react-navigation/native";
 import ProfileScreen from "../screens/ProfileScreen";
-import React from "react";
 import RegisterScreen from "../screens/RegisterScreen";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -16,12 +18,21 @@ const HomeStackNavigator = createNativeStackNavigator();
 
 
 function MyStack() {
+    const [,,,,,user,token] = useContext(AuthContext);
     return (
 
         <Stack.Navigator initialRouteName="Login">
+            {
+            (token !== '') ?  <Stack.Screen name="Home" component={HomeScreen}  /> 
+            : 
+            
+            <>
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Home" component={HomeScreen}  />
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+            </>
+            
+            }
+            
         </Stack.Navigator>
     );
 }

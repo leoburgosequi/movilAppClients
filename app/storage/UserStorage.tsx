@@ -25,7 +25,7 @@ async function getItem(key: string) {
         }
     } catch (error) {
         console.error('Error al obtener datos:', error);
-        return null;
+      return null;
     }
 }
 

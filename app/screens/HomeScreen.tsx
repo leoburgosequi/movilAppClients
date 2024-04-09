@@ -1,6 +1,9 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, { useContext } from "react";
+import { Text, TouchableOpacity, View } from 'react-native';
 
-import React from "react";
+import { AuthContext } from '../context/AuthContext';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { StandardStyles } from '../styles/StandardStyles';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,41 +11,37 @@ import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
 
+    const [, ,logout , , isLoading, user] = useContext(AuthContext);
+
     const navigation = useNavigation();
-    
+
     return (
         <View>
-        <Text style={
-            {textAlign:"center", marginTop:200}
-        }>Home Screen</Text>
+            <Spinner visible={isLoading} />
+            <Text style={{ textAlign: "center", marginTop: 200 }}>Hola, {user.name}</Text>
 
-        <TouchableOpacity
-            onPress={() => navigation.navigate("Profile")}
-            style={{
-                backgroundColor: "purple",
-                padding:10,
-                marginTop: "20%",
-                width:"50%",
-                alignSelf:"center",
-                borderRadius:10
-            }}
-        >
-
-            <Text
-                style={{
-                    textAlign:"center",
-                    color:"white"
-                }}
+            <TouchableOpacity
+                // onPress={() => navigation.navigate("Profile")}
+                style={StandardStyles.orangeSecondaryButton}
             >
-                Ir a perfil
-            </Text>
+
+                <Text style={StandardStyles.simpleTextOrange}>
+                    Ir a perfil
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => logout()}
+                style={StandardStyles.orangePrimaryButton}
+            >
+
+                <Text style={StandardStyles.simpleTextWhite}>
+                    Salir
+                </Text>
+            </TouchableOpacity>
 
 
-        </TouchableOpacity>
 
-        
 
-      
         </View>
     )
 }

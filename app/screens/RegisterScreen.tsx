@@ -3,6 +3,7 @@ import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import { AuthContext } from '../context/AuthContext';
 import { LoginStyles } from "../styles/LoginStyles";
+import Spinner from "react-native-loading-spinner-overlay";
 import { StandardStyles } from "../styles/StandardStyles";
 
 const RegisterScreen = ({navigation}) => {
@@ -12,11 +13,11 @@ const RegisterScreen = ({navigation}) => {
     const [name, setName] = useState('leonardo');
     const [passwordConfirmation, setPasswordConfirmation] = useState('1234567890');
 
-    const [register] = useContext(AuthContext);
-    console.log(register);
+    const [,register,,,isLoading,user] = useContext(AuthContext);
 
     return (
         <View style={LoginStyles.container}>
+            <Spinner visible={isLoading} />
         <View style={LoginStyles.wrapper} >
         <TextInput
                 placeholder="Nombre"
