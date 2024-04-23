@@ -46,9 +46,19 @@ export const AuthProvider = ({ children }: any) => {
 
     const testApi = () => {
         console.log("testApi");
+        setIsLoading(true);
         axios.get(`${BASE_URI}/testApi`).then(res => {
-            console.log(res.data);
+            Alert.alert(res.data.nombre, '', [
+                {
+                  text: 'Cerrar',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+              ]);
+              setIsLoading(false);
+              return;
         }).catch(e => {
+            setIsLoading(false);
             console.log("test api error: ", e);
         })
     }
